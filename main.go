@@ -21,7 +21,9 @@ type loginReq struct {
 }
 
 type graphqlReq struct {
-	Query string `json:"query"`
+	Query         string                 `json:"query"`
+	OperationName string                 `json:"operationName"`
+	Variables     map[string]interface{} `json:"variables"`
 }
 
 var schema graphql.Schema
@@ -101,9 +103,11 @@ func graphqlHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := util.SetUserIDToContext(r.Context(), userID)
 
 	result := graphql.Do(graphql.Params{
-		Schema:        schema,
-		RequestString: req.Query,
-		Context:       ctx,
+		Schema:         schema,
+		RequestString:  req.Query,
+		OperationName:  req.OperationName,
+		VariableValues: req.Variables,
+		Context:        ctx,
 	})
 	// disable suggestion
 	for i := range result.Errors {

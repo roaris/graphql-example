@@ -40,6 +40,7 @@ query{
 ```shell
 curl -s -X POST "http://127.0.0.1:8000/graphql" -H "Content-Type: application/json" -H "Cookie: session=$session" -d '{"query":"query{getPost(id:\"b711966f-1a9d-46d5-8f5e-c2bfe8f94229\"){id,title,content,user{id,name,posts{id,title,content}}}}"}' | jq
 ```
+
 ```json
 {
   "data": {
@@ -320,4 +321,12 @@ curl -s -X POST "http://127.0.0.1:8000/graphql" -H "Content-Type: application/js
     "deletePost": "4ae67d5f-c92d-477a-b7b5-90412bb0a65c"
   }
 }
+```
+
+## operationName & variables
+
+You can also request by `query`, `operationName` and `variables`.
+
+```shell
+curl -s -X POST "http://127.0.0.1:8000/graphql" -H "Content-Type: application/json" -H "Cookie: session=$session" -d '{"query":"query getPostOpe($id:String!){getPost(id:$id){id,title,content,user{id,name,posts{id,title,content}}}}","operationName":"getPostOpe","variables":{"id":"b711966f-1a9d-46d5-8f5e-c2bfe8f94229"}}' | jq
 ```
